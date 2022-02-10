@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,9 @@ namespace Graf_red_Rolan
 {
     public partial class Form1 : Form
     {
+        RichTextBox rtb;
+        ListBox listbox_razdel1;
+        ListBox listbox_razdel2;
         public Form1()
         {
             this.Size = new Size(900, 600);
@@ -31,19 +35,28 @@ namespace Graf_red_Rolan
 
             MainMenu.Name = "MainMenu";
 
-            // Create a Menu Item  
-            ToolStripMenuItem FileMenu = new ToolStripMenuItem("File");
-            FileMenu.BackColor = Color.OrangeRed;
-            FileMenu.ForeColor = Color.Black;
-            FileMenu.Text = "File Menu";
-            FileMenu.Font = new Font("Comic Sans MS", 10);
-            FileMenu.TextAlign = ContentAlignment.BottomRight;
-            FileMenu.ToolTipText = "Click Me";
+            //-----------MenuItems--------------------//
+            ToolStripMenuItem fileItem = new ToolStripMenuItem("Файл");
 
-            MainMenu.Items.Add(FileMenu);
+            ToolStripMenuItem newItem1 = new ToolStripMenuItem("Открыть");
+            newItem1.ShortcutKeys = Keys.Control | Keys.O;
+            fileItem.DropDownItems.Add(newItem1);
 
-            FileMenu.Click += new System.EventHandler(this.FileMenuItemClick);
-            //---------------------------------------------------
+            ToolStripMenuItem newItem2 = new ToolStripMenuItem("Сохранить");
+            newItem2.ShortcutKeys = Keys.Control | Keys.S;
+            fileItem.DropDownItems.Add(newItem2);
+
+            ToolStripMenuItem newItem3 = new ToolStripMenuItem("Выход");
+            newItem3.ShortcutKeys = Keys.Control | Keys.X;
+            fileItem.DropDownItems.Add(newItem3);
+
+            MainMenu.Items.Add(fileItem);
+
+            newItem1.Click += NewItem1_Click;
+            newItem2.Click += NewItem2_Click;
+            newItem3.Click += NewItem3_Click;
+
+            //---------------------------------------------------*/
 
 
             //----------------RadioButton--------------//
@@ -114,11 +127,15 @@ namespace Graf_red_Rolan
             this.Controls.Add(combo1);
             this.Controls.Add(combo2);
 
-            combo1.Items.Add("Mumbai");
-            combo1.Items.Add("Delhi");
-            combo1.Items.Add("Jaipur");
-            combo1.Items.Add("Kolkata");
-            combo1.Items.Add("Bengaluru");
+            combo1.Items.Add("Алфавиту (по возрастанию)");
+            combo1.Items.Add("Алфавиту (по убыванию)");
+            combo1.Items.Add("Длинне слова (по возрастанию)");
+            combo1.Items.Add("Длинне слова (по убыванию)");
+
+            combo2.Items.Add("Алфавиту (по возрастанию)");
+            combo2.Items.Add("Алфавиту (по убыванию)");
+            combo2.Items.Add("Длинне слова (по возрастанию)");
+            combo2.Items.Add("Длинне слова (по убыванию)");
 
             //-------Labels------------//
             Label lbl_poisk = new Label
@@ -342,9 +359,39 @@ namespace Graf_red_Rolan
 
         }
 
-        private void FileMenuItemClick(object sender, EventArgs e)
+        private void NewItem1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Хорош");
+            OpenFileDialog OpenDlg = new OpenFileDialog();
+
+            if (OpenDlg.ShowDialog() == DialogResult.OK)
+            {
+                StreamReader Reader = new StreamReader(OpenDlg.FileName, Encoding.Default);
+                rtb.Text = Reader.ReadToEnd();
+                Reader.Close();
+            }
+            OpenDlg.Dispose();
+        }
+
+        private void NewItem2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog SaveDlg = new OpenFileDialog();
+
+            if (SaveDlg.ShowDialog() == DialogResult.OK)
+            {
+                StreamWriter Writer = new StreamWriter(SaveDlg.FileName);
+
+                for (int i = 0; i < listbox_razdel2.Items.Count; i++)
+                {
+                    Writer.WriteLine((string)listbox_razdel2.Items[i]);
+                }
+                Writer.Close();
+            }
+            SaveDlg.Dispose();
+        }
+
+        private void NewItem3_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
