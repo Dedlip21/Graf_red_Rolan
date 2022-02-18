@@ -8,14 +8,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace Graf_red_Rolan
 {
     public partial class Form1 : Form
     {
+        MenuStrip MainMenu;
+        ToolStripMenuItem fileItem1;
+        ToolStripMenuItem fileItem2;
+        ToolStripMenuItem newItem1;
+        ToolStripMenuItem newItem2;
+        ToolStripMenuItem newItem3;
+
         RichTextBox rtb;
-        ListBox listbox_razdel1;
-        ListBox listbox_razdel2;
+
+        Panel panel;
+
+        Label lbl_poisk;
+        Label lbl_razdel1;
+        Label lbl_razdel2;
+
+        ListBox listbox_niz;
+        public ListBox listbox_razdel1;
+        public ListBox listbox_razdel2;
+
+        RadioButton rb1;
+        RadioButton rb2;
+        RadioButton rb3;
+
+        CheckBox checkbox1;
+        CheckBox checkbox2;
+
+        TextBox txt_box;
+
+        ComboBox combo1;
+        ComboBox combo2;
+
+
+        GroupBox gb1;
+        GroupBox gb2;
+
+        Button btn_start;
+        Button btn_poisk;
+        Button btn_vihod;
+        Button btn_sbros;
+        Button btn_ochistit_levo;
+        Button btn_udalit;
+        Button btn_ochistit_pravo;
+        Button btn_sortirovat_levo;
+        Button btn_dobavit;
+        Button btn_sortirovat_pravo;
+        Button btn_left;
+        Button btn_right;
+        Button btn_double_left;
+        Button btn_double_right;
+
         public Form1()
         {
             this.Size = new Size(900, 600);
@@ -23,7 +71,7 @@ namespace Graf_red_Rolan
             //--------------MenuStrip Creation---------------//
 
             // MenuStrip
-            MenuStrip MainMenu = new MenuStrip();
+            MainMenu = new MenuStrip();
 
             MainMenu.BackColor = Color.OrangeRed;
             MainMenu.ForeColor = Color.Black;
@@ -36,21 +84,23 @@ namespace Graf_red_Rolan
             MainMenu.Name = "MainMenu";
 
             //-----------MenuItems--------------------//
-            ToolStripMenuItem fileItem = new ToolStripMenuItem("Файл");
+            fileItem1 = new ToolStripMenuItem("Файлf");
+            fileItem2 = new ToolStripMenuItem("?");
 
-            ToolStripMenuItem newItem1 = new ToolStripMenuItem("Открыть");
+            newItem1 = new ToolStripMenuItem("Открыть");
             newItem1.ShortcutKeys = Keys.Control | Keys.O;
-            fileItem.DropDownItems.Add(newItem1);
+            fileItem1.DropDownItems.Add(newItem1);
 
-            ToolStripMenuItem newItem2 = new ToolStripMenuItem("Сохранить");
+            newItem2 = new ToolStripMenuItem("Сохранить");
             newItem2.ShortcutKeys = Keys.Control | Keys.S;
-            fileItem.DropDownItems.Add(newItem2);
+            fileItem1.DropDownItems.Add(newItem2);
 
-            ToolStripMenuItem newItem3 = new ToolStripMenuItem("Выход");
+            newItem3 = new ToolStripMenuItem("Выход");
             newItem3.ShortcutKeys = Keys.Control | Keys.X;
-            fileItem.DropDownItems.Add(newItem3);
+            fileItem1.DropDownItems.Add(newItem3);
 
-            MainMenu.Items.Add(fileItem);
+            MainMenu.Items.Add(fileItem1);
+            MainMenu.Items.Add(fileItem2);
 
             newItem1.Click += NewItem1_Click;
             newItem2.Click += NewItem2_Click;
@@ -60,7 +110,7 @@ namespace Graf_red_Rolan
 
 
             //----------------RadioButton--------------//
-            RadioButton rb1 = new RadioButton
+            rb1 = new RadioButton
             {
                 Text = "Все",
                 Location = new Point(570, 475),
@@ -68,7 +118,7 @@ namespace Graf_red_Rolan
                 BackColor = Color.Aqua
             };
 
-            RadioButton rb2 = new RadioButton
+            rb2 = new RadioButton
             {
                 Text = "Содержащие цифры",
                 Location = new Point(570, 495),
@@ -76,7 +126,7 @@ namespace Graf_red_Rolan
                 BackColor = Color.Aqua
             };
 
-            RadioButton rb3 = new RadioButton
+            rb3 = new RadioButton
             {
                 Text = "Содержащие 'e-mail'",
                 Location = new Point(570, 515),
@@ -89,7 +139,7 @@ namespace Graf_red_Rolan
 
 
             //---------CheckBox------------//
-            CheckBox checkbox1 = new CheckBox
+            checkbox1 = new CheckBox
             {
                 Text = "Раздел 1",
                 Location = new Point(270, 400),
@@ -97,7 +147,7 @@ namespace Graf_red_Rolan
                 BackColor = Color.LightBlue
             };
 
-            CheckBox checkbox2 = new CheckBox
+            checkbox2 = new CheckBox
             {
                 Text = "Раздел 2",
                 Location = new Point(270, 430),
@@ -109,7 +159,7 @@ namespace Graf_red_Rolan
 
 
             //--------ComboBox----------//
-            ComboBox combo1 = new ComboBox
+            combo1 = new ComboBox
             {
                 Text = "Сортировка по ..",
                 Location = new Point(50, 60),
@@ -117,7 +167,7 @@ namespace Graf_red_Rolan
                 Sorted = true,
             };
 
-            ComboBox combo2 = new ComboBox
+            combo2 = new ComboBox
             {
                 Text = "Сортировка по ..",
                 Location = new Point(350, 60),
@@ -138,7 +188,7 @@ namespace Graf_red_Rolan
             combo2.Items.Add("Длинне слова (по убыванию)");
 
             //-------Labels------------//
-            Label lbl_poisk = new Label
+            lbl_poisk = new Label
             {
                 Text = "Введите искаемое слово",
                 Location = new Point(50, 360),
@@ -146,7 +196,7 @@ namespace Graf_red_Rolan
                 BackColor = Color.LightBlue
             };
 
-            Label lbl_razdel1 = new Label
+            lbl_razdel1 = new Label
             {
                 Text = "Раздел 1",
                 Location = new Point(50, 40),
@@ -154,7 +204,7 @@ namespace Graf_red_Rolan
                 //BackColor = Color.LightBlue
             };
 
-            Label lbl_razdel2 = new Label
+            lbl_razdel2 = new Label
             {
                 Text = "Раздел 2",
                 Location = new Point(350, 40),
@@ -167,104 +217,110 @@ namespace Graf_red_Rolan
 
 
             //--------Button---------//
-            Button btn_rb = new Button
+            btn_start = new Button
             {
                 Text = "Начать",
                 Location = new Point(730, 480),
                 Size = new Size(100, 50),
             };
+            btn_start.Click += Btn_start_Click;
 
-            Button btn_poisk = new Button
+            btn_poisk = new Button
             {
                 Text = "Поиск",
                 Location = new Point(270, 470),
                 Size = new Size(100, 60),
             };
+            btn_poisk.Click += Btn_poisk_Click;
 
-            Button btn_vihod = new Button
+            btn_vihod = new Button
             {
                 Text = "Выход",
                 Location = new Point(400, 480),
                 Size = new Size(130, 60),
             };
+            btn_vihod.Click += Btn_vihod_Click;
 
-            Button btn_sbros = new Button
+            btn_sbros = new Button
             {
                 Text = "Сброс",
                 Location = new Point(400, 410),
                 Size = new Size(130, 60),
             };
+            btn_sbros.Click += Btn_sbros_Click;
 
-            Button btn_ochistit_levo = new Button
+            btn_ochistit_levo = new Button
             {
                 Text = "Очистить",
                 Location = new Point(40, 300),
                 Size = new Size(130, 30),
             };
+            btn_ochistit_levo.Click += Btn_ochistit_levo_Click;
 
-            Button btn_udalit = new Button
+            btn_udalit = new Button
             {
                 Text = "Удалить",
                 Location = new Point(200, 300),
                 Size = new Size(130, 30),
             };
 
-            Button btn_ochistit_pravo = new Button
+            btn_ochistit_pravo = new Button
             {
                 Text = "Очистить",
                 Location = new Point(360, 300),
                 Size = new Size(130, 30),
             };
+            btn_ochistit_pravo.Click += Btn_ochistit_pravo_Click;
 
-            Button btn_sortirovat_levo = new Button
+            btn_sortirovat_levo = new Button
             {
                 Text = "Сортировать",
                 Location = new Point(40, 260),
                 Size = new Size(130, 30),
             };
 
-            Button btn_dobavit = new Button
+            btn_dobavit = new Button
             {
                 Text = "Добавить",
                 Location = new Point(200, 260),
                 Size = new Size(130, 30),
             };
 
-            Button btn_sortirovat_pravo = new Button
+            btn_sortirovat_pravo = new Button
             {
                 Text = "Сортировать",
                 Location = new Point(360, 260),
                 Size = new Size(130, 30),
             };
 
-            Button btn_left = new Button
+            btn_left = new Button
             {
                 Text = "<",
                 Location = new Point(220, 90),
                 Size = new Size(100, 30),
             };
 
-            Button btn_right = new Button
+            btn_right = new Button
             {
                 Text = ">",
                 Location = new Point(220, 130),
                 Size = new Size(100, 30),
             };
 
-            Button btn_double_left = new Button
+            btn_double_left = new Button
             {
                 Text = "<<",
                 Location = new Point(220, 170),
                 Size = new Size(100, 30),
             };
 
-            Button btn_double_right = new Button
+            btn_double_right = new Button
             {
                 Text = ">>",
                 Location = new Point(220, 210),
                 Size = new Size(100, 30),
             };
-            this.Controls.Add(btn_rb);
+            this.Controls.Add(btn_start);
             this.Controls.Add(btn_poisk);
 
             this.Controls.Add(btn_vihod);
@@ -284,7 +340,7 @@ namespace Graf_red_Rolan
             this.Controls.Add(btn_double_right);
 
             //-----------TekstBox----------------//
-            TextBox txt_box = new TextBox
+            txt_box = new TextBox
             {
                 Location = new Point(50, 385),
                 Size = new Size(160, 25),
@@ -292,29 +348,31 @@ namespace Graf_red_Rolan
             this.Controls.Add(txt_box);
 
             //----------Richtextbox------------//
-            RichTextBox rtb = new RichTextBox();
-            rtb.Location = new Point(560, 30);
-            rtb.Size = new Size(300, 400);
+            rtb = new RichTextBox
+            {
+                Location = new Point(560, 30),
+                Size = new Size(300, 400)
+            };
 
             this.Controls.Add(rtb);
 
 
             //----------ListBox---------------------//
-            ListBox listbox_niz = new ListBox()
+            listbox_niz = new ListBox()
             {
                 Location = new Point(50, 410),
                 Size = new Size(200, 130),
                 SelectionMode = SelectionMode.MultiExtended
             };
 
-            ListBox listbox_razdel1 = new ListBox()
+            listbox_razdel1 = new ListBox()
             {
                 Location = new Point(40, 90),
                 Size = new Size(150, 170),
                 SelectionMode = SelectionMode.MultiExtended
             };
 
-            ListBox listbox_razdel2 = new ListBox()
+            listbox_razdel2 = new ListBox()
             {
                 Location = new Point(350, 90),
                 Size = new Size(150, 170),
@@ -325,7 +383,7 @@ namespace Graf_red_Rolan
             this.Controls.Add(listbox_razdel2);
 
             //--------GroupBox-------------------//
-            GroupBox gb1 = new GroupBox();
+            gb1 = new GroupBox();
             gb1.Location = new Point(40, 340);
             gb1.Size = new Size(350, 200);
             gb1.BackColor = Color.LightBlue;
@@ -337,7 +395,7 @@ namespace Graf_red_Rolan
             gb2.BackColor = Color.LightCoral;
             gb2.Text = "Что-то тут будет";*/
 
-            GroupBox gb2 = new GroupBox();
+            gb2 = new GroupBox();
             gb2.Location = new Point(560, 450);
             gb2.Size = new Size(300, 100);
             gb2.BackColor = Color.Aqua;
@@ -345,10 +403,9 @@ namespace Graf_red_Rolan
 
             this.Controls.Add(gb1);
             this.Controls.Add(gb2);
-            //this.Controls.Add(gb3);
 
             //------Panel--------//
-            Panel panel = new Panel();
+            panel = new Panel();
             {
                 panel.Location = new Point(20, 30);
                 panel.Size = new Size(520, 520);
@@ -359,8 +416,96 @@ namespace Graf_red_Rolan
 
         }
 
+        private void Btn_poisk_Click(object sender, EventArgs e)
+        {
+            listbox_niz.Items.Clear();
+
+            string Find = txt_box.Text;
+
+            if (checkbox1.Checked)
+            {
+                foreach (string String in listbox_razdel1)
+                {
+                    if (String.Contains(Find)) listbox_niz.Items.Add(String);
+                }
+            }
+
+            if (checkbox2.Checked)
+            {
+                foreach (string String in listbox_razdel2)
+                {
+                    if (String.Contains(Find)) listbox_niz.Items.Add(String);
+                }
+            }
+        }
+
+        private void Btn_ochistit_pravo_Click(object sender, EventArgs e)
+        {
+            listbox_razdel2.Items.Clear();
+        }
+
+        private void Btn_ochistit_levo_Click(object sender, EventArgs e)
+        {
+            listbox_razdel1.Items.Clear();
+        }
+
+        private void Btn_sbros_Click(object sender, EventArgs e)
+        {
+            listbox_razdel1.Items.Clear();
+            listbox_razdel2.Items.Clear();
+
+            rtb.Clear();
+            /*rtb.Update();
+            rtb.Clear();*/
+
+            txt_box.Clear();
+
+            rb1.Checked = false;
+            rb2.Checked = false;
+            rb3.Checked = false;
+
+            checkbox1.Checked = false;
+            checkbox2.Checked = false;
+        }
+
+        private void Btn_vihod_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void Btn_start_Click(object sender, EventArgs e)
+        {
+            listbox_razdel1.Items.Clear();
+            listbox_razdel2.Items.Clear();
+
+            listbox_razdel1.BeginUpdate();
+
+            string[] Strings = rtb.Text.Split(new char[] { '\n', '\t', ' ' },
+                StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string s in Strings)
+            {
+                string Str = s.Trim();
+
+                if (Str == String.Empty) continue;
+                if (rb1.Checked) listbox_razdel1.Items.Add(Str);
+
+                if (rb2.Checked)
+                {
+                    if (Regex.IsMatch(Str, @"\d")) listbox_razdel1.Items.Add(Str);
+                }
+
+                if (rb3.Checked)
+                {
+                    if (Regex.IsMatch(Str, @"\w+@\w+\.\w+")) listbox_razdel1.Items.Add(Str);
+                }
+            }
+            listbox_razdel1.EndUpdate();
+        }
+
         private void NewItem1_Click(object sender, EventArgs e)
         {
+
             OpenFileDialog OpenDlg = new OpenFileDialog();
 
             if (OpenDlg.ShowDialog() == DialogResult.OK)
@@ -393,5 +538,6 @@ namespace Graf_red_Rolan
         {
             Application.Exit();
         }
+
     }
 }
