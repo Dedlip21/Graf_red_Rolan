@@ -84,7 +84,7 @@ namespace Graf_red_Rolan
             MainMenu.Name = "MainMenu";
 
             //-----------MenuItems--------------------//
-            fileItem1 = new ToolStripMenuItem("Файлf");
+            fileItem1 = new ToolStripMenuItem("Файл");
             fileItem2 = new ToolStripMenuItem("?");
 
             newItem1 = new ToolStripMenuItem("Открыть");
@@ -231,7 +231,7 @@ namespace Graf_red_Rolan
                 Location = new Point(270, 470),
                 Size = new Size(100, 60),
             };
-            btn_poisk.Click += Btn_poisk_Click;
+            //btn_poisk.Click += Btn_poisk_Click;
 
             btn_vihod = new Button
             {
@@ -389,12 +389,6 @@ namespace Graf_red_Rolan
             gb1.BackColor = Color.LightBlue;
             gb1.Text = "Поиск";
 
-            /*GroupBox gb2 = new GroupBox();
-            gb2.Location = new Point(20, 30);
-            gb2.Size = new Size(520, 520);
-            gb2.BackColor = Color.LightCoral;
-            gb2.Text = "Что-то тут будет";*/
-
             gb2 = new GroupBox();
             gb2.Location = new Point(560, 450);
             gb2.Size = new Size(300, 100);
@@ -418,13 +412,14 @@ namespace Graf_red_Rolan
 
         private void Btn_poisk_Click(object sender, EventArgs e)
         {
+
             listbox_niz.Items.Clear();
 
             string Find = txt_box.Text;
 
             if (checkbox1.Checked)
             {
-                foreach (string String in listbox_razdel1)
+                foreach (string String in listbox_razdel1.Items)
                 {
                     if (String.Contains(Find)) listbox_niz.Items.Add(String);
                 }
@@ -432,7 +427,7 @@ namespace Graf_red_Rolan
 
             if (checkbox2.Checked)
             {
-                foreach (string String in listbox_razdel2)
+                foreach (string String in listbox_razdel2.Items)
                 {
                     if (String.Contains(Find)) listbox_niz.Items.Add(String);
                 }
