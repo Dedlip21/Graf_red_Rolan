@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace Graf_red_Rolan
 {
@@ -29,7 +30,7 @@ namespace Graf_red_Rolan
         Label lbl_razdel1;
         Label lbl_razdel2;
 
-        ListBox listbox_niz;
+        public ListBox listbox_niz;
         public ListBox listbox_razdel1;
         public ListBox listbox_razdel2;
 
@@ -177,11 +178,13 @@ namespace Graf_red_Rolan
             this.Controls.Add(combo1);
             this.Controls.Add(combo2);
 
+            combo1.Items.Add("Нету сортировки");
             combo1.Items.Add("Алфавиту (по возрастанию)");
             combo1.Items.Add("Алфавиту (по убыванию)");
             combo1.Items.Add("Длинне слова (по возрастанию)");
             combo1.Items.Add("Длинне слова (по убыванию)");
 
+            combo2.Items.Add("Нету сортировки");
             combo2.Items.Add("Алфавиту (по возрастанию)");
             combo2.Items.Add("Алфавиту (по убыванию)");
             combo2.Items.Add("Длинне слова (по возрастанию)");
@@ -231,7 +234,7 @@ namespace Graf_red_Rolan
                 Location = new Point(270, 470),
                 Size = new Size(100, 60),
             };
-            //btn_poisk.Click += Btn_poisk_Click;
+            btn_poisk.Click += Btn_poisk_Click;
 
             btn_vihod = new Button
             {
@@ -263,6 +266,7 @@ namespace Graf_red_Rolan
                 Location = new Point(200, 300),
                 Size = new Size(130, 30),
             };
+            btn_udalit.Click += Btn_udalit_Click;
 
             btn_ochistit_pravo = new Button
             {
@@ -278,6 +282,7 @@ namespace Graf_red_Rolan
                 Location = new Point(40, 260),
                 Size = new Size(130, 30),
             };
+            btn_sortirovat_levo.Click += Btn_sortirovat_levo_Click;
 
             btn_dobavit = new Button
             {
@@ -285,6 +290,7 @@ namespace Graf_red_Rolan
                 Location = new Point(200, 260),
                 Size = new Size(130, 30),
             };
+            btn_dobavit.Click += Btn_dobavit_Click;
 
             btn_sortirovat_pravo = new Button
             {
@@ -292,6 +298,7 @@ namespace Graf_red_Rolan
                 Location = new Point(360, 260),
                 Size = new Size(130, 30),
             };
+            btn_sortirovat_pravo.Click += Btn_sortirovat_pravo_Click;
 
             btn_left = new Button
             {
@@ -299,6 +306,7 @@ namespace Graf_red_Rolan
                 Location = new Point(220, 90),
                 Size = new Size(100, 30),
             };
+            btn_left.Click += Btn_left_Click;
 
             btn_right = new Button
             {
@@ -306,6 +314,7 @@ namespace Graf_red_Rolan
                 Location = new Point(220, 130),
                 Size = new Size(100, 30),
             };
+            btn_right.Click += Btn_right_Click;
 
             btn_double_left = new Button
             {
@@ -313,6 +322,7 @@ namespace Graf_red_Rolan
                 Location = new Point(220, 170),
                 Size = new Size(100, 30),
             };
+            btn_double_left.Click += Btn_double_left_Click;
 
             btn_double_right = new Button
             {
@@ -320,6 +330,8 @@ namespace Graf_red_Rolan
                 Location = new Point(220, 210),
                 Size = new Size(100, 30),
             };
+            btn_double_right.Click += Btn_double_right_Click;
+
             this.Controls.Add(btn_start);
             this.Controls.Add(btn_poisk);
 
@@ -410,6 +422,265 @@ namespace Graf_red_Rolan
 
         }
 
+        private void Btn_sortirovat_pravo_Click(object sender, EventArgs e)
+        {
+            ArrayList list = new ArrayList();
+
+            if (combo1.Text == "Нету сортировки")
+            {
+                list.Clear();
+            }
+
+            else if (combo2.Text == "Алфавиту (по возрастанию)")
+            {
+                listbox_razdel2.Sorted = true;
+            }
+
+            else if (combo2.Text == "Алфавиту (по убыванию)")
+            {
+                listbox_razdel2.Sorted = false;
+
+                foreach (object o in listbox_razdel2.Items)
+                {
+                    list.Add(o);
+                }
+                list.Sort();
+                list.Reverse();
+                listbox_razdel2.Items.Clear();
+                foreach (object o in list)
+                {
+                    listbox_razdel2.Items.Add(o);
+                }
+            }
+
+            else if (combo2.Text == "Длинне слова (по возрастанию)")
+            {
+                listbox_razdel2.Sorted = false;
+
+                if (listbox_razdel2.Items.Count > 1)
+                {
+                    bool swapped;
+                    do
+                    {
+                        int counter = listbox_razdel2.Items.Count - 1;
+                        swapped = false;
+
+                        while (counter > 0)
+                        {
+                            // Compare the items' length. 
+                            if (listbox_razdel2.Items[counter].ToString().Length
+                                < listbox_razdel2.Items[counter - 1].ToString().Length)
+                            {
+                                // Swap the items.
+                                object temp = listbox_razdel2.Items[counter];
+                                listbox_razdel2.Items[counter] = listbox_razdel2.Items[counter - 1];
+                                listbox_razdel2.Items[counter - 1] = temp;
+                                swapped = true;
+                            }
+                            // Decrement the counter.
+                            counter -= 1;
+                        }
+                    }
+                    while ((swapped == true));
+                }
+            }
+
+            else if (combo2.Text == "Длинне слова (по убыванию)")
+            {
+                listbox_razdel2.Sorted = false;
+
+                if (listbox_razdel2.Items.Count > 1)
+                {
+                    bool swapped;
+                    do
+                    {
+                        int counter = listbox_razdel2.Items.Count - 1;
+                        swapped = false;
+
+                        while (counter > 0)
+                        {
+                            // Compare the items' length. 
+                            if (listbox_razdel2.Items[counter].ToString().Length
+                                > listbox_razdel2.Items[counter - 1].ToString().Length)
+                            {
+                                // Swap the items.
+                                object temp = listbox_razdel2.Items[counter];
+                                listbox_razdel2.Items[counter] = listbox_razdel2.Items[counter - 1];
+                                listbox_razdel2.Items[counter - 1] = temp;
+                                swapped = true;
+                            }
+                            // Decrement the counter.
+                            counter -= 1;
+                        }
+                    }
+                    while ((swapped == true));
+                }
+            }
+        }
+
+        private void Btn_sortirovat_levo_Click(object sender, EventArgs e)
+        {
+            ArrayList list = new ArrayList();
+
+            if (combo1.Text == "Нету сортировки")
+            {
+                list.Clear();
+            }
+
+            else if (combo1.Text == "Алфавиту (по возрастанию)")
+            {
+                listbox_razdel1.Sorted = true;
+            }
+
+            else if (combo1.Text == "Алфавиту (по убыванию)")
+            {
+                listbox_razdel1.Sorted = false;
+
+                foreach (object o in listbox_razdel1.Items)
+                {
+                    list.Add(o);
+                }
+                list.Sort();
+                list.Reverse();
+                listbox_razdel1.Items.Clear();
+                foreach (object o in list)
+                {
+                    listbox_razdel1.Items.Add(o);
+                }
+            }
+
+            else if (combo1.Text == "Длинне слова (по возрастанию)")
+            {
+                listbox_razdel1.Sorted = false;
+
+                if (listbox_razdel1.Items.Count > 1)
+                {
+                    bool swapped;
+                    do
+                    {
+                        int counter = listbox_razdel1.Items.Count - 1;
+                        swapped = false;
+
+                        while (counter > 0)
+                        {
+                            // Compare the items' length. 
+                            if (listbox_razdel1.Items[counter].ToString().Length
+                                < listbox_razdel1.Items[counter - 1].ToString().Length)
+                            {
+                                // Swap the items.
+                                object temp = listbox_razdel1.Items[counter];
+                                listbox_razdel1.Items[counter] = listbox_razdel1.Items[counter - 1];
+                                listbox_razdel1.Items[counter - 1] = temp;
+                                swapped = true;
+                            }
+                            // Decrement the counter.
+                            counter -= 1;
+                        }
+                    }
+                    while ((swapped == true));
+                }
+            }
+
+            else if (combo1.Text == "Длинне слова (по убыванию)")
+            {
+                listbox_razdel1.Sorted = false;
+
+                if (listbox_razdel1.Items.Count > 1)
+                {
+                    bool swapped;
+                    do
+                    {
+                        int counter = listbox_razdel1.Items.Count - 1;
+                        swapped = false;
+
+                        while (counter > 0)
+                        {
+                            // Compare the items' length. 
+                            if (listbox_razdel1.Items[counter].ToString().Length
+                                > listbox_razdel1.Items[counter - 1].ToString().Length)
+                            {
+                                // Swap the items.
+                                object temp = listbox_razdel1.Items[counter];
+                                listbox_razdel1.Items[counter] = listbox_razdel1.Items[counter - 1];
+                                listbox_razdel1.Items[counter - 1] = temp;
+                                swapped = true;
+                            }
+                            // Decrement the counter.
+                            counter -= 1;
+                        }
+                    }
+                    while ((swapped == true));
+                }
+            }
+        }
+
+        private void Btn_left_Click(object sender, EventArgs e)
+        {
+            listbox_razdel1.BeginUpdate();
+
+            foreach (object Item in listbox_razdel2.SelectedItems)
+            {
+                listbox_razdel1.Items.Add(Item);
+            }
+
+            for (int i = listbox_razdel2.Items.Count - 1; i >= 0; i--)
+            {
+                if (listbox_razdel2.GetSelected(i)) listbox_razdel2.Items.RemoveAt(i);
+            }
+
+            listbox_razdel1.EndUpdate();
+        }
+
+        private void Btn_right_Click(object sender, EventArgs e)
+        {
+            listbox_razdel2.BeginUpdate();
+
+            foreach (object Item in listbox_razdel1.SelectedItems)
+            {
+                listbox_razdel2.Items.Add(Item);
+            }
+
+            for (int i = listbox_razdel1.Items.Count - 1; i >= 0; i--)
+            {
+                if (listbox_razdel1.GetSelected(i)) listbox_razdel1.Items.RemoveAt(i);
+            }
+
+            listbox_razdel2.EndUpdate();
+        }
+
+        private void Btn_double_left_Click(object sender, EventArgs e)
+        {
+            listbox_razdel1.Items.AddRange(listbox_razdel2.Items);
+            listbox_razdel2.Items.Clear();
+        }
+
+        private void Btn_double_right_Click(object sender, EventArgs e)
+        {
+            listbox_razdel2.Items.AddRange(listbox_razdel1.Items);
+            listbox_razdel1.Items.Clear();
+        }
+
+        private void Btn_dobavit_Click(object sender, EventArgs e)
+        {
+            action AddRec = new action();
+
+            AddRec.Owner = this;
+            AddRec.ShowDialog();
+        }
+
+        private void Btn_udalit_Click(object sender, EventArgs e)
+        {
+            for (int i = listbox_razdel1.Items.Count - 1; i >= 0; i--)
+            {
+                if (listbox_razdel1.GetSelected(i)) listbox_razdel1.Items.RemoveAt(i);
+            }
+
+            for (int i = listbox_razdel2.Items.Count - 1; i >= 0; i--)
+            {
+                if (listbox_razdel2.GetSelected(i)) listbox_razdel2.Items.RemoveAt(i);
+            }
+        }
+
         private void Btn_poisk_Click(object sender, EventArgs e)
         {
 
@@ -421,7 +692,10 @@ namespace Graf_red_Rolan
             {
                 foreach (string String in listbox_razdel1.Items)
                 {
-                    if (String.Contains(Find)) listbox_niz.Items.Add(String);
+                    if (String.Contains(Find))
+                    {
+                        listbox_niz.Items.Add(String);
+                    }
                 }
             }
 
@@ -429,7 +703,10 @@ namespace Graf_red_Rolan
             {
                 foreach (string String in listbox_razdel2.Items)
                 {
-                    if (String.Contains(Find)) listbox_niz.Items.Add(String);
+                    if (String.Contains(Find))
+                    {
+                        listbox_niz.Items.Add(String);
+                    }
                 }
             }
         }
@@ -514,7 +791,7 @@ namespace Graf_red_Rolan
 
         private void NewItem2_Click(object sender, EventArgs e)
         {
-            OpenFileDialog SaveDlg = new OpenFileDialog();
+            SaveFileDialog SaveDlg = new SaveFileDialog();
 
             if (SaveDlg.ShowDialog() == DialogResult.OK)
             {
